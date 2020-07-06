@@ -1,0 +1,39 @@
+#include<bits/stdc++.h>
+#define n 5
+using namespace std;
+
+bool subSum(int wt[],int W)
+{
+    bool dp[n+1][W+1];
+    for(int j=0;j<=W;j++)
+        dp[0][j] = false;
+    for(int i=0;i<=n;i++)
+        dp[i][0] = true;
+    for(int i=1;i<=n;i++)
+    {
+        for(int j=1;j<=W;j++)
+        {
+            if(wt[i-1]<=j)
+                dp[i][j] = (dp[i-1][j-wt[i-1]])||(dp[i-1][j]);
+            else if(wt[i-1]>j)
+                dp[i][j] = dp[i-1][j];
+        }
+    }
+    return dp[n][W];
+}
+
+bool equalSum(int wt[])
+{
+    int sum = 0;
+    for(int i=0;i<n;i++)
+        sum += wt[i];
+    if(sum%2!=0)
+        return false;
+    return subSum(wt,sum/2);
+}
+
+int main()
+{
+    int wt[] = {2,3,7,8,10};
+    cout<<equalSum(wt);
+}
